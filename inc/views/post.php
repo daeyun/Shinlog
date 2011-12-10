@@ -61,12 +61,13 @@ include "inc/views/inc/navbar.php";
 				<div class="clearfloat"></div>
 			</div>
 		</div>
-        <div class="comments">
+		<?php if($p["comments_allowed"]=="1"){ ?>
+		<div class="comments">
                 <div id="disqus_thread"></div>
                 <script type="text/javascript">
-                    var disqus_shortname = 'shinlog'; // required: replace example with your forum shortname
-                    //var disqus_identifier = '<?php echo $p['id']; ?>';
-                    //var disqus_url = 'http://<?php echo ADDRESS."/".$p['permalink']; ?>';
+                    var disqus_shortname = 'daeyun'; // required: replace example with your forum shortname
+                    var disqus_identifier = '<?php echo $p['id']; ?>';
+                    var disqus_url = 'http://<?php echo ADDRESS."/".$p['permalink']; ?>';
                     (function() {
                         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
                         dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
@@ -75,6 +76,7 @@ include "inc/views/inc/navbar.php";
                 </script>
                 <noscript>Please enable JavaScript to view the comments.</noscript>
         </div>
+		<?php } ?>
 		<?php endforeach; ?>
 	</div> <!-- end of content -->
 <?php include "inc/views/inc/sidebar.php"; ?>

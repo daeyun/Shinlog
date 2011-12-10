@@ -289,6 +289,12 @@ ul.nav a:hover, ul.nav a:active, ul.nav a:focus {
 	margin-left:10px;
 }
 
+.comments{
+	margin-top:50px;
+	border-top:1px solid #ddd;
+	padding-top:20px;
+}
+
 .more-link{
 	font-family:Georgia, "Times New Roman", Times, serif;
 	font-weight:bold;
@@ -455,7 +461,7 @@ a.cat:hover{
 }
 
 #comment{
-	width:97%;
+	width:97%; /* to be deleted */ 
 }
 
 #reply-title{
@@ -473,7 +479,6 @@ a.cat:hover{
 }
 
 
-/* ~~ The footer ~~ */
 .footer {
 	padding: 10px 0;
 	position: relative;
@@ -487,16 +492,15 @@ a.cat:hover{
 }
 
 
-/* ~~ miscellaneous float/clear classes ~~ */
-.fltrt {  /* this class can be used to float an element right in your page. The floated element must precede the element it should be next to on the page. */
+.fltrt { 
 	float: right;
 	margin-left: 8px;
 }
-.fltlft { /* this class can be used to float an element left in your page. The floated element must precede the element it should be next to on the page. */
+.fltlft {
 	float: left;
 	margin-right: 8px;
 }
-.clearfloat { /* this class can be placed on a <br /> or empty div as the final element following the last floated div (within the #container) if the #footer is removed or taken out of the #container */
+.clearfloat {
 	clear:both;
 	height:0;
 	font-size: 1px;

@@ -1,5 +1,4 @@
 <?php
-ob_start();
 require_once 'inc/config.php';
 $REQUEST_URI=$_SERVER["REQUEST_URI"];
 $req_uri=isset($REQUEST_URI) ? $REQUEST_URI:null;
@@ -28,6 +27,7 @@ $cacheTime=(int)file_get_contents($dir."/cache/cachetime");
 if(!isset($_COOKIE["shinlog_user"]) and $req[0]!="admin" and file_exists($cacheFile) and $cacheTime<filemtime($cacheFile)){
 	include($cacheFile);
 }else{
+	ob_start();
 	require_once "inc/models/MySQL.php";
 	require_once "inc/models/formatting.php";
 	require_once "inc/models/functions.php";

@@ -1,0 +1,100 @@
+#disqus_thread #dsq-global-toolbar{
+	margin:0 !important;
+}
+#disqus_thread .dsq-reply{
+	margin-top: 0.5em !important;
+}
+#disqus_thread h3 {
+	font-family: Verdana, Arial, Helvetica, sans-serif !important;
+	font-size: 16px !important;
+	margin-bottom: 15px !important;
+	font-weight:bold !important;
+	color:#343434 !important;
+	font-weight: normal !important;
+}
+#disqus_thread a{
+	text-decoration: none !important;
+	color: #2B2B2B !important;
+	font-size: 90% !important;
+}
+#disqus_thread .dsq-comment-header{
+	background: none !important;
+	font-size: 105% !important;
+	padding: 0px !important;
+	border: none !important;
+	border-bottom:1px solid #eee !important;
+	padding-top:2px !important;
+	padding-bottom:5px !important;
+	padding-left:4px !important;
+	margin: 0.5em 0 0.4em !important;
+	max-height: 36px;
+	font-family: Verdana, Arial, Helvetica, sans-serif !important;
+	white-space: nowrap;
+	color:#333!important;
+	overflow: hidden;
+	font-weight:bold !important;
+	text-overflow: ellipsis;
+	position: relative;
+	line-height: 20px !important;
+}
+
+#disqus_thread .dsq-comment-message{
+	font-family: Verdana, Arial, Helvetica, sans-serif !important;
+	font-size: 90% !important;
+	color:#121212 !important
+}
+
+#dsq-sort-by select{
+	backgroun-color:#fff !important;
+	color:#787878 !important;	
+	font-size:80%;
+	font-family: Verdana, Arial, Helvetica, sans-serif !important;
+}
+
+#disqus_thread .dsq-avatar img{
+	width: 26px !important;
+	height: 26px !important;
+}
+#disqus_thread .dsq-comment-body{
+	padding: 0 0 0 36px;
+}
+
+#disqus_thread .dsq-append-post{
+	margin-top:20px;
+}
+
+#disqus_thread .dsq-textarea-background{
+	background:none !important; 
+	background-color:#f6f6f6 !important;
+	width: auto;
+	border: 1px solid #ddd !important;
+	-webkit-border-radius: 0 !important;
+	-moz-border-radius: 0 !important;
+	border-radius: 0 !important;
+	-webkit-box-shadow: none !important;
+	-moz-box-shadow: none !important;
+	box-shadow: none !important;
+	position: relative;
+}
+
+#dsq-content .dsq-toolbar-item {
+	background:none !important;
+	background-color:#888 !important;
+}
+
+a.dsq-subscribe-email em, a.dsq-subscribe-rss em {
+	text-decoration: underline;
+	font-size:90% !important;
+	color:#666 !important;
+	font-style: normal;
+}
+
+.dsq-trackback-url {
+	margin: 0 !important;
+	font-size:90% !important;
+}
+
+.dsq-trackback-url input{
+	width:240px !important;
+	margin-left:10px;
+}
