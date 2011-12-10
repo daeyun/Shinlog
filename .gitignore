@@ -1,2 +1,3 @@
 apps
+*.swp
 inc/config.php
