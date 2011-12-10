@@ -1,0 +1,39 @@
+.content {
+	width:680px;
+}
+.title{
+	font-size:14px;
+	font-size: 140%;
+	font-family:Georgia, "Times New Roman", Times, serif;
+	color:#222;
+	margin-bottom:10px;
+	font-weight:bold;
+}
+
+.sidebar1{
+	width:250px;
+}
+#tags{
+	font-size:90%;
+	width:100%;
+}
+#categories{
+	font-size:90%;
+	width:100%;
+}
+
+#toggle-advanced-options{
+	font-size:65%;
+	line-height:100%;
+	text-decoration:none;
+	color:#aaa;
+	text-align:right;
+    cursor: pointer;
+    cursor: hand;
+
+	
+}
+
+#advanced-options{
+	display:none;
+}
