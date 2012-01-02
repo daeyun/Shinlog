@@ -1,4 +1,4 @@
 apps
 *.swp
 inc/config.php
-.ht*
+.htaccess

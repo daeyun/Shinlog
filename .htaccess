@@ -2,8 +2,8 @@
 RewriteEngine On
 RewriteBase /
 
-RewriteCond %{HTTP_HOST} ^www\.shinlog\.com$ [NC]
-RewriteRule ^(.*)$ http://shinlog.com/$1 [R=301,L]
+RewriteCond %{HTTP_HOST} ^www\.shin\.ws$ [NC]
+RewriteRule ^(.*)$ http://shin.ws/$1 [R=301,L]
 
 RewriteRule ^index\.php$ - [L]
 
@@ -12,6 +12,6 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . /index.php [L]
 
 RewriteCond    %{HTTP_REFERER} !^$
-RewriteCond    %{HTTP_REFERER} !^http://([-a-z0-9]+\.)?localhost [NC]
+RewriteCond    %{HTTP_REFERER} !^http://([-a-z0-9]+\.)?shin.ws [NC]
 RewriteRule    \.(gif|jpe?g|png|js|css)$ - [F,NC,L]
 </IfModule>

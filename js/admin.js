@@ -57,7 +57,7 @@
 			}
 		});
 	});
-	$(document).bind('keydown', 'f7', function(ent){ window.location.href = "http://localhost/admin/new"; });	
+	$(document).bind('keydown', 'f7', function(ent){ window.location.href = "admin/new"; });	
 	$(document).bind('keydown', 'f8', function(ent){
 		if($('.post-edit-link').length != 0){
 			window.location.href = $(".post-edit-link").attr("href");

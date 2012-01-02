@@ -1,5 +1,5 @@
 <?php
-if(strpos($_SERVER['HTTP_USER_AGENT'],'FEEDBURNER_ID')==false){ // unless user agent contains the word FeedBurner
+if(strpos($_SERVER['HTTP_USER_AGENT'],'FeedBurner')===false){ // unless user agent contains the word FeedBurner
 	header('Location: http://feeds.feedburner.com/'.FEEDBURNER_ID); // redirect to FeedBurner feed
 	exit;
 }
