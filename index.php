@@ -1,18 +1,18 @@
 <?php
 require_once 'inc/config.php';
+require_once "inc/models/functions.php";
 $REQUEST_URI=$_SERVER["REQUEST_URI"];
-$req_uri=isset($REQUEST_URI) ? $REQUEST_URI:null;
+$req_uri=$REQUEST_URI;
 $dir=dirname(__FILE__);
 //$starttime= microtime(TRUE);
-if($temp=strpos($req_uri,'?'))
+if(($temp=strpos($req_uri,'?'))!==false)
 	$req_uri=substr($req_uri, 0, $temp); //ignore ? and the following substring
-if($temp=strpos($req_uri,'//'))
+if(($temp=strpos($req_uri,'//'))!==false)
 	$req_uri=substr($req_uri, 0, $temp); //ignore everything after consecutive slashes
 if(substr($req_uri, -1) == '/' AND $req_uri!='/') //if the last character is a slash
 	$req_uri=substr($req_uri,0,-1); // remove last character
 if(substr($req_uri, 0,10)=='/index.php') // if it starts with /index.php
 	$req_uri='/';
-	
 $will_redirect=($REQUEST_URI!=$req_uri);
 if($will_redirect){
     header('Location: http://'.ADDRESS.$req_uri); // Redirect to the new uri
@@ -21,6 +21,12 @@ if($will_redirect){
 
 $req_uri=substr($req_uri, 1); //remove the slash at the begining
 $req=explode('/',$req_uri);
+foreach($req as $r){
+	if(preg_match('/[^A-Za-z0-9\_\-\.\@\+\,\%\^\!\'\"]/',$r)){
+		include "inc/views/404.php";
+		exit();
+	}
+}
 $cacheFile = $dir."/cache/html/tmp_".str_replace("/"," ",$req_uri);
 $cacheTime=(int)file_get_contents($dir."/cache/cachetime");
 
@@ -30,22 +36,21 @@ if(!isset($_COOKIE["shinlog_user"]) and $req[0]!="admin" and file_exists($cacheF
 	ob_start();
 	require_once "inc/models/MySQL.php";
 	require_once "inc/models/formatting.php";
-	require_once "inc/models/functions.php";
 	$database = new MySQLDatabase();
 
-	foreach($req as $r){
-		if(preg_match('/[^A-Za-z0-9\_\-\.\@\+\,\%\^\!\'\"]/',$r)){
-			require "inc/views/404.php";
-			exit();
-		}
+	$q=$database->query("SELECT COUNT(*) FROM `sl_posts` WHERE `permalink`='".mysql_real_escape_string($req_uri)."';");
+	$q=$database->fetch_array($q);
+	if($q["COUNT(*)"]=="1"){
+		$req[0]=$req_uri;
+		$pageExists=true;
+		unset($req[1]);
 	}
-
 	$is_admin=false;
 	if(isset($_COOKIE["shinlog_user"])){
 		$delete_cookie=true;
 		$cookieVar=explode('|',mysql_real_escape_string(base64_decode($_COOKIE["shinlog_user"])));
 		if(strlen($cookieVar[0])<50){
-			$q=$database->query("SELECT id,password,name,rand_md5 from sl_users WHERE name='".$cookieVar[0]."' AND status='42' LIMIT 1");
+			$q=$database->query("SELECT id,password,name,rand_md5 from sl_users WHERE name='".mysql_real_escape_string($cookieVar[0])."' AND status='42' LIMIT 1");
 			if($q=$database->fetch_array($q)){
 				$serverUserHash=getHash($q['name'].'::'.$q['rand_md5'].'::'.$q['password']);
 				if(getMD5($cookieVar[0].$cookieVar[2].mysql_real_escape_string($_SERVER['REMOTE_ADDR']))==$cookieVar[1] AND $serverUserHash==$cookieVar[3]){
@@ -68,10 +73,12 @@ if(!isset($_COOKIE["shinlog_user"]) and $req[0]!="admin" and file_exists($cacheF
 		include "inc/controllers/admin.php";
 	}else if($req[0]=="feed" and !isset($req[1])){
 		include "inc/controllers/feed.php";
-	}else if( $req[0]=="" or !isset($req[1]) or (($req[0]=="tag" or $req[0]=="search") and isset($req[1])) ){
+	}else if($req[0]=="json"){
+		include "inc/controllers/json.php";
+	}else if((isset($pageExists) and $pageExists) or $req[0]=="" or !isset($req[1]) or (($req[0]=="tag" or $req[0]=="search") and isset($req[1])) ){
 		include "inc/controllers/blog.php";
 	}else{ // page not found
-		require "inc/views/404.php";
+		include "inc/views/404.php";
 		exit();
 	}
 

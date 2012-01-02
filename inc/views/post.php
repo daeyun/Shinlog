@@ -13,13 +13,12 @@ Content:
 	$posts_array
 		$element
 			['id'],
-			['permalink'],
-			['title'],
-			['content'],
 			['date'],
-			['status'],
-			['comments_allowed'],
-			['type'],
+			['title'],
+			['html_content'],
+			['permalink'],
+			['level'],
+			['widget_visibility'][]
 
 Sidebar:
 	$recent_posts_array
@@ -36,32 +35,36 @@ include "inc/views/inc/navbar.php";
 	<div class="content">
 		<?php foreach($posts_array as $p): ?>
 		<div class="post">
+			<?php if(widgetCheck(4,&$posts_array[0]["widget_visibility"],&$widget)){ ?>			
 			<h1 class="post-title">
 				<?php echo $p['title'] ?>
 			</h1>
+			<?php } ?>
+			<?php if(widgetCheck(5,&$posts_array[0]["widget_visibility"],&$widget)){ ?>
+			<div class="entry-date"><?php echo $p['date'] ?></div>
+			<?php } ?>
 			<div class="post-content">
-				<?php echo $p['content']; ?>
+				<?php echo $p['html_content']; ?>
 			</div>
 			<div class="post-info">
-				<div class="alignleft"><span class="entry-date"><?php echo $p['date'] ?></span></div>
-				<div class="alignright">
-					<?php if($is_admin==true){
-						echo '<a class="post-edit-link" href="http://'.ADDRESS.'/admin/edit/'.$p['id'].'">Edit</a>';
-					}
-					?>
-				</div>
-				<div class="clearfloat"></div>
+				<?php if($is_admin==true){ ?>
+					<div class="alignright">
+						<a class="post-edit-link" href="http://<?php echo ADDRESS; ?>/admin/edit/<?php echo $p['id']; ?>">Edit</a>
+					</div>
+					<div class="clearfloat"></div>
+				<?php } ?>
 				
-				<div class="cats-and-tags">
+				<?php if(widgetCheck(10,&$posts_array[0]["widget_visibility"],&$widget)){ ?>
+				<div class="tags">
 					<?php  if(isset($p['tags'])) foreach($p['tags'] as $tag): ?>
 						<a class="tag alignleft" href="http://<?php echo ADDRESS; ?>/tag/<?php echo str_replace(" ", "-", $tag) ?>"><?php echo $tag ?></a>
 					<?php endforeach; //display tags ?>
 				</div>
-				
+				<?php } ?>
 				<div class="clearfloat"></div>
 			</div>
 		</div>
-		<?php if($p["comments_allowed"]=="1"){ ?>
+		<?php if(widgetCheck(8,&$posts_array[0]["widget_visibility"],&$widget)){ ?>
 		<div class="comments">
                 <div id="disqus_thread"></div>
                 <script type="text/javascript">

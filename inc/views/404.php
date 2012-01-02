@@ -4,6 +4,7 @@ $not_found=true;
 include "inc/views/inc/header.php";
 include "inc/views/inc/navbar.php";
 ?>
+	<div class="container">
 	<div class="content">
 		<div class="post">
 			<h2 class="post-title">Page Not Found</h2>

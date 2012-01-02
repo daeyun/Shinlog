@@ -37,12 +37,25 @@ if(isset($_POST['logout']) AND $_POST['logout']=='yes-all' AND isset($_COOKIE["s
 
 if(isset($is_admin) and $is_admin==true){
 	if(!isset($req[1])){
+		$q=$database->query("SELECT title, id from sl_posts WHERE author_id='".mysql_real_escape_string($admin_id)."' and status='2' ORDER BY date DESC");
+		while($row=$database->fetch_array($q)){
+			$admin_private_posts_array[]=$row;
+		}
+		$q=$database->query("SELECT title, id from sl_posts WHERE author_id='".mysql_real_escape_string($admin_id)."' and status='0' ORDER BY date DESC");
+		while($row=$database->fetch_array($q)){
+			$admin_draft_posts_array[]=$row;
+		}
+		$q=$database->query("SELECT title, id from sl_posts WHERE author_id='".mysql_real_escape_string($admin_id)."' and status='3' ORDER BY date DESC");
+		while($row=$database->fetch_array($q)){
+			$admin_deleted_posts_array[]=$row;
+		}
 		include "inc/views/admin-main.php";
 	}else if($req[1]=="new" and !isset($req[2])){
 		//starting a new page
 		include "inc/views/admin-post.php";
 	}else if((($req[1]=="new" and $req[2]=="save" ) or ($req[1]=="edit" and isset($req[2]))) and isset($_POST["status"]) and !isset($req[3])){
 		//submitting a new or edited content
+		require_once "inc/models/markdown.php";
 
 	    if(isset($_POST["date"]) and $_POST["date"]!=""){
 			$myDate=date('Y-m-d H:i:s', strtotime($_POST["date"]));
@@ -53,18 +66,14 @@ if(isset($is_admin) and $is_admin==true){
 				$myDate=date("Y-m-d H:i:s");
 			}
 	    }
-	    if(isset($_POST["title"]) and $_POST["title"]!=""){
-			$myTitle=$_POST["title"];
-	    }else{
-			$myTitle="untitled";
-	    }
+		$myTitle=$_POST["title"];
 	    if(isset($_POST["permalink"]) and $_POST["permalink"]!=""){
-			$myPermalink=sanitize_title_with_dashes($_POST["permalink"]);
-	    }else{
+			$myPermalink=$_POST["permalink"];
+	    }else if(isset($_POST["permalink"]) and $_POST["permalink"]==""){
 			$myPermalink=sanitize_title_with_dashes($myTitle);
 	    }
 	    $duplicate=true;
-	    $count=2;
+	    $number=2;
 	    $myTempPermalink=$myPermalink;
 	    while($duplicate){
 			if($req[1]=="edit"){
@@ -73,24 +82,34 @@ if(isset($is_admin) and $is_admin==true){
 				$q=$database->query("SELECT id FROM `sl_posts` WHERE permalink='".mysql_real_escape_string($myTempPermalink)."'");
 			}
 			if($q=$database->fetch_array($q)){
-				$myTempPermalink=$myPermalink."-".$count;
-				$count++;
+				$myTempPermalink=$myPermalink."-".$number;
+				$number++;
 			}else{
 				$duplicate=false;
 				$myPermalink=$myTempPermalink;
 			}
 		}
 
+		$count=0;
+		$widget_visibility="";	
+		while(isset($widget[$count])){
+			if(isset($_POST["widget".$count]) and $_POST["widget".$count]=="1"){
+				$widget_visibility.="1";
+			}else{
+				$widget_visibility.="0";
+			}
+			$count+=1;
+		}
 	    if($req[1]=="edit"){
-			$queryString="UPDATE  `shinlog`.`sl_posts` SET `title` =  '".mysql_real_escape_string($myTitle)."', `content` =  '".mysql_real_escape_string($_POST["body"])."', `author_id` =  '".mysql_real_escape_string($admin_id)."', `type` =  '".mysql_real_escape_string($_POST["type"])."', `permalink` =  '".mysql_real_escape_string($myPermalink)."', `status` =  '".mysql_real_escape_string($_POST["status"])."', ";
+			$queryString="UPDATE  `shinlog`.`sl_posts` SET `title` =  '".mysql_real_escape_string($myTitle)."', `html_content` =  '".mysql_real_escape_string(Markdown($_POST["body"]))."', `markdown_content` =  '".mysql_real_escape_string($_POST["body"])."', `author_id` =  '".mysql_real_escape_string($admin_id)."', `type` =  '".mysql_real_escape_string($_POST["type"])."', `permalink` =  '".mysql_real_escape_string($myPermalink)."', `status` =  '".mysql_real_escape_string($_POST["status"])."', ";
 			
 			if($req[1]!="edit" or $myDate!=""){
 				$queryString.="`date` =  '".mysql_real_escape_string($myDate)."', "; 
 			}
 				
-			$queryString.="`comments_allowed` =  '".mysql_real_escape_string($_POST["comments"])."', `social_media` =  '".mysql_real_escape_string($_POST["social-media"])."', `level` =  '".mysql_real_escape_string($_POST["level"])."' WHERE  `sl_posts`.`id` =".$req[2];
+			$queryString.="`level` =  '".mysql_real_escape_string($_POST["level"])."', `widget_visibility`='{$widget_visibility}' WHERE  `sl_posts`.`id` =".$req[2];
 		}else{
-			$queryString="INSERT INTO `shinlog`.`sl_posts` (`id`, `title`, `content`, `author_id`, `type`, `permalink`, `status`, `date`, `comments_allowed`, `social_media`, `level`) VALUES (NULL, '".mysql_real_escape_string($myTitle)."', '".mysql_real_escape_string($_POST["body"])."', '".mysql_real_escape_string($admin_id)."', '".mysql_real_escape_string($_POST["type"])."', '".mysql_real_escape_string($myPermalink)."', '".mysql_real_escape_string($_POST["status"])."', '".mysql_real_escape_string($myDate)."', '".mysql_real_escape_string($_POST["comments"])."', '".mysql_real_escape_string($_POST["social-media"])."', '".mysql_real_escape_string($_POST["level"])."');";
+			$queryString="INSERT INTO `shinlog`.`sl_posts` (`id`, `title`, `html_content`, `markdown_content`, `author_id`, `type`, `permalink`, `status`, `date`, `level`, `widget_visibility`) VALUES (NULL, '".mysql_real_escape_string($myTitle)."', '".mysql_real_escape_string(Markdown($_POST["body"]))."', '".mysql_real_escape_string($_POST["body"])."', '".mysql_real_escape_string($admin_id)."', '".mysql_real_escape_string($_POST["type"])."', '".mysql_real_escape_string($myPermalink)."', '".mysql_real_escape_string($_POST["status"])."', '".mysql_real_escape_string($myDate)."', '".mysql_real_escape_string($_POST["level"])."', '{$widget_visibility}');";
 		}
 	    $q=$database->query($queryString);
 
@@ -118,7 +137,6 @@ if(isset($is_admin) and $is_admin==true){
 				}
 				unset($tag);
 				$q=$database->query($queryString);
-				echo $queryString;
 				while($row=$database->fetch_array($q)){
 					$DBtags[] = mysql_real_escape_string($row["tag"]); //without escaping $row["tag"], it won't be able to compare escapable tag names
 				}
@@ -241,8 +259,12 @@ if(isset($is_admin) and $is_admin==true){
 				fwrite($fh, time());
 				fclose($fh);
 			}
-
-			header("location: http://".ADDRESS."/admin/edit/".$postID); // Redirect to the new uri
+			if(isset($_POST["ajax"]) and $_POST["ajax"]=="true"){
+				echo "successful";
+				exit();
+			}else{
+				header("location: http://".ADDRESS."/admin/edit/".$postID); // Redirect to the new uri
+			}
 
 	    }
 	    

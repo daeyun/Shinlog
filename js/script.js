@@ -1,15 +1,18 @@
-$(document).ready(function(){
-	 
-	if ($(window).width() < 960) {
+$(function() {
+	if ($(window).width() < 960 && $(window).width() > 10) {
 		$(".content").width(520);
 		$(".sidebar1").width(220);
 		$(".container").width(790);
 	}
-	$(".xoxo ul").each(function(){$(this).find("li:first").css("border-top", "1px solid #f0f0f0")});
-	
-	//$(".widget_recent_entries ul li:even").css("background-color", "#f2f2f2");
+	$(".sidebar_list ul").each(function(){$(this).find("li:first a").css("border-top", "1px solid #f0f0f0")});
+	if(!($(".sidebar1").length)){
+		$(".content").css({"width":"auto","padding-right":"20px"});
+	}
+	$("#searchform").submit(function(){
+		$("#searchform").attr("action", "/search/"+encodeURIComponent($("#s").val()));
+	});
+	$("#s").focus( function() { if (this.value == 'Search') this.value=''; $("#s").stop().animate({width:200},600); });
+	$("#s").blur( function() { if (this.value == ''){ this.value = 'Search'; $("#s").stop().animate({width:55},600);} });
+	$("code, pre").addClass("prettyprint");
+	prettyPrint();
 });
-window.onload = function() {
-document.getElementById('s').onfocus = function() { if (this.value == 'Search') this.value=''; };
-document.getElementById('s').onblur = function() { if (this.value == '') this.value = 'Search'; };
-}

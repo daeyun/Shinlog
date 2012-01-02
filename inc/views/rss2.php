@@ -1,13 +1,8 @@
 <?php
 header('Content-type: application/xml'); 
 /*
-
 Constants:
-	SITE_address
-	SITE_description
-	SITE_main_title
-	SITE_name
-
+	see config.php
 
 Content:
 	$items_array
@@ -16,7 +11,7 @@ Content:
 			['permalink'],
 			['title'],
 			['date'],
-			['content'],
+			['html_content'],
 			['tags']
 				$array_element
 
@@ -34,10 +29,10 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 	> 
 
 <channel> 
-	<title><?php echo SITE_name; ?></title> 
-	<atom:link href="http://<?php echo SITE_address; ?>/feed/" rel="self" type="application/rss+xml" /> 
-	<link><?php echo SITE_address; ?></link> 
-	<description><?php echo SITE_description; ?></description> 
+	<title><?php echo NAME; ?></title> 
+	<atom:link href="http://<?php echo ADDRESS; ?>/feed/" rel="self" type="application/rss+xml" /> 
+	<link><?php echo ADDRESS; ?></link> 
+	<description><?php echo DESCRIPTION; ?></description> 
 	<lastBuildDate>Sun, 20 Feb 2011 10:49:16 +0000</lastBuildDate> 
 	<language>en</language> 
 	<sy:updatePeriod>hourly</sy:updatePeriod> 
@@ -46,11 +41,11 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 	<?php foreach($items_array as $item): ?>
 	<item>
 		<title><?php echo $item['title'] ?></title>
-		<link>http://<?php echo SITE_address; ?>/<?php echo $item['permalink'] ?>/</link>
-		<comments>http://<?php echo SITE_address; ?>/<?php echo $item['permalink'] ?>/#comments</comments>
+		<link>http://<?php echo ADDRESS; ?>/<?php echo $item['permalink'] ?>/</link>
+		<comments>http://<?php echo ADDRESS; ?>/<?php echo $item['permalink'] ?>/#comments</comments>
 		<pubDate><?php echo $item['date'] ?></pubDate>
 
-		<content:encoded><![CDATA[ <?php echo $item['content'] ?> ]]></content:encoded>
+		<content:encoded><![CDATA[ <?php echo $item['html_content'] ?> ]]></content:encoded>
 	</item>
 	<?php endforeach; ?>
 	

@@ -25,8 +25,22 @@ function decrypt_string($string,$key){
 }
 
 function array_iunique($array) {
-return array_intersect_key($array,array_unique(array_map("strtolower",$array)));
+	return array_intersect_key($array,array_unique(array_map("strtolower",$array)));
 }
 
-
+function widgetCheck($num,$widget_settings,$all_widgets){
+	if(isset($widget_settings[$num])){
+		if($widget_settings[$num]=="1"){
+			return true;
+		}else{
+			return false;
+		}
+	}else{
+		if(isset($all_widgets[$num]) and $all_widgets[$num][1]==1){
+			return true;
+		}else{
+			return false;
+		}
+	}
+}
 ?>
