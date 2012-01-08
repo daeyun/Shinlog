@@ -57,7 +57,7 @@ include "inc/views/inc/navbar.php";
 				<?php if(widgetCheck(10,&$posts_array[0]["widget_visibility"],&$widget)){ ?>
 				<div class="tags">
 					<?php  if(isset($p['tags'])) foreach($p['tags'] as $tag): ?>
-						<a class="tag alignleft" href="http://<?php echo ADDRESS; ?>/tag/<?php echo str_replace(" ", "-", $tag) ?>"><?php echo $tag ?></a>
+						<a class="tag alignleft" href="http://<?php echo ADDRESS; ?>/tag/<?php echo str_replace(" ", "-", strtolower($tag)) ?>"><?php echo $tag ?></a>
 					<?php endforeach; //display tags ?>
 				</div>
 				<?php } ?>

@@ -30,8 +30,8 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 
 <channel> 
 	<title><?php echo NAME; ?></title> 
-	<atom:link href="http://<?php echo ADDRESS; ?>/feed/" rel="self" type="application/rss+xml" /> 
-	<link><?php echo ADDRESS; ?></link> 
+	<atom:link href="http://<?php echo ADDRESS; ?>/feed/" type="application/rss+xml" /> 
+	<link>http://<?php echo ADDRESS; ?></link> 
 	<description><?php echo DESCRIPTION; ?></description> 
 	<lastBuildDate>Sun, 20 Feb 2011 10:49:16 +0000</lastBuildDate> 
 	<language>en</language> 

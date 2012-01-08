@@ -19,14 +19,19 @@ if($req[0]==""){ //main
 	$show_posts=true;
 	$show_posts_query="SELECT id,date,title,html_content,permalink from sl_posts WHERE type=0 AND status=1 ORDER BY date DESC LIMIT 0,3";
 }else if($req[0]=="tag" and isset($req[1])){
-	$req[1]=str_replace("-", " ", $req[1]);
-	$q=$database->query("SELECT sl_posts.title, sl_posts.permalink, sl_posts.date FROM sl_tags, sl_tag_connections, sl_posts WHERE sl_posts.status=1 AND sl_tags.tag='".mysql_real_escape_string($req[1])."' AND sl_tags.id=sl_tag_connections.tag_id AND sl_tag_connections.post_id=sl_posts.id ORDER BY sl_posts.id DESC");
+	$q=$database->query("SELECT COUNT(*) FROM sl_tags, sl_tag_connections, sl_posts WHERE sl_posts.status=1 AND sl_tags.tag='".mysql_real_escape_string($req[1])."' AND sl_tags.id=sl_tag_connections.tag_id AND sl_tag_connections.post_id=sl_posts.id ORDER BY sl_posts.id DESC");
+	$q=$database->fetch_array($q);
+	if($q["COUNT(*)"]=="0"){
+		$req[1]=str_replace("-", " ", $req[1]);
+	}
+
+	$q=$database->query("SELECT sl_posts.title, sl_posts.permalink,sl_tags.tag, sl_posts.date FROM sl_tags, sl_tag_connections, sl_posts WHERE sl_posts.status=1 AND sl_tags.tag='".mysql_real_escape_string($req[1])."' AND sl_tags.id=sl_tag_connections.tag_id AND sl_tag_connections.post_id=sl_posts.id ORDER BY sl_posts.id DESC");
 	while($row=$database->fetch_array($q)){
 		$row["date"] = date("m-d-Y", strtotime($row["date"]));
 		$posts_array[]=$row;
 	}
 	if(isset($posts_array)){
-		$title="Tag Archives: <span>$req[1]</span>";
+		$title="Tag Archives: <span>".$posts_array[0]["tag"]."</span>";
 		require "inc/views/posts-list.php";
 	}else{
 		require "inc/views/404.php";
