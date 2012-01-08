@@ -26,8 +26,6 @@ Content:
 
 if(isset($edit_content)){
 	$edit_mode=true;
-	//print_r($edit_content);
-	
 }else{
 	$edit_mode=false;
 }
